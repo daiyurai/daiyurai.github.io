@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DAIYU RAI | Pro Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --cobalt: #0047AB; 
+            --gold: #FFD700; 
+            --skyblue: #00BFFF;
+            --dark: #030303; 
+        }
+
+        body { 
+            /* Enhanced background style for better coverage */
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fafafa; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        /* ENHANCED TYPOGRAPHY EFFECTS */
+        
+        /* Glowing Golden Lightning effect for DAIYU */
+        .glowing-daiyu {
+            color: white;
+            font-weight: 900;
+            text-shadow: 
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px var(--gold),
+                0 0 82px var(--gold),
+                0 0 92px var(--gold),
+                0 0 102px var(--gold),
+                0 0 151px var(--gold);
+            animation: flicker 2s infinite alternate;
+        }
+
+        /* Flicker animation to simulate lightning/neon */
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 
+                    0 0 4px #fff,
+                    0 0 11px #fff,
+                    0 0 19px #fff,
+                    0 0 40px var(--gold),
+                    0 0 80px var(--gold),
+                    0 0 90px var(--gold),
+                    0 0 100px var(--gold),
+                    0 0 150px var(--gold);
+            }
+            20%, 24%, 55% {       
+                text-shadow: none;
+                color: var(--gold);
+            }
+        }
+
+        /* Gradient Blue to Skyblue effect for RAI */
+        .gradient-rai {
+            background: linear-gradient(180deg, var(--cobalt) 0%, var(--skyblue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            /* Simple shadow to make it pop against the glow above */
+            filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.5));
+        }
+
+        /* AUTO SLIDER LOGIC */
+        .slider-container { width: 100%; overflow: hidden; margin-top: 30px; position: relative; }
+        .slider-track { display: flex; width: calc(300px * 10); animation: scroll 30s linear infinite; }
+        .slide { width: 300px; height: 400px; flex-shrink: 0; padding: 10px; cursor: pointer; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.3s ease; }
+        .slide img:hover { transform: scale(1.05); border-color: var(--gold); }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-300px * 5)); } }
+
+        /* NAVIGATION & MENU */
+        .header-ui { position: fixed; top: 20px; right: 20px; z-index: 5000; }
+        .menu-btn { 
+            cursor: pointer; background: rgba(0, 71, 171, 0.2); padding: 15px; border-radius: 15px; 
+            border: 1px solid var(--cobalt); backdrop-filter: blur(10px); 
+        }
+        .menu-btn span { display: block; width: 22px; height: 2px; background: var(--gold); margin: 5px 0; transition: 0.4s; }
+        
+        .sidebar { 
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; 
+            background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(40px); z-index: 4500;
+            transition: 0.5s ease; display: flex; flex-direction: column; justify-content: center; padding: 40px;
+        }
+        .sidebar.active { right: 0; border-left: 2px solid var(--gold); }
+        
+        /* VISIBLE MENU COLORS */
+        .nav-link { font-size: 1.2rem; font-weight: 600; margin: 10px 0; text-align: right; transition: 0.3s; color: black; }
+        .nav-link:hover { transform: translateX(-10px); filter: brightness(1.2); color: var(--cobalt); }
+
+        /* POPUP (LIGHTBOX) */
+        #lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 6000;
+            display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
+        }
+        #lightbox.active { display: flex; }
+
+        .page-content { display: none; width: 100%; max-width: 1000px; margin: 0 auto; padding: 100px 24px; }
+        .active-page { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="header-ui">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <button onclick="showPage('home')" class="nav-link">HOME</button>
+        <button onclick="showPage('about')" class="nav-link">ABOUT</button>
+        <button onclick="showPage('gallery')" class="nav-link">GALLERY</button>
+        <button onclick="showPage('contact')" class="nav-link">CONTACT</button>
+        <button onclick="showPage('comment-section')" class="nav-link">COMMENT</button>
+    </nav>
+
+    <div id="lightbox" onclick="this.classList.remove('active')">
+        <img id="lb-img" class="max-w-full max-h-[60vh] rounded-2xl shadow-2xl border-2 border-gold" src="">
+        <div class="mt-6 text-center">
+            <h3 id="lb-title" class="text-2xl font-bold text-yellow-500"></h3>
+            <p id="lb-desc" class="text-gray-400 italic mt-2"></p>
+        </div>
+    </div>
+
+    <main>
+        <section id="home" class="page-content active-page">
+            <h1 class="text-7xl font-black leading-none mb-4 tracking-tighter">
+                <span class="glowing-daiyu">DAIYU</span><br>
+                <span class="gradient-rai">RAI</span>
+            </h1>
+            <p class="text-zinc-500 mb-8 max-w-md">Professional Technical Solutions & Media.</p>
+            
+            <div class="slider-container">
+                <div class="slider-track">
+                    <div class="slide" onclick="openLB('https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=600', 'Fiber Tech', 'ISP Infrastructure Deployment')"><img src="https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=400"></div>
+                    <div class="slide" onclick="openLB('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600', 'Media Core', 'Cinematic Camera Setup')"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400"></div>
+                    <div class="slide" onclick="openLB('https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?w=600', 'Integration', 'Smart System Control')"><img src="https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?w=400"></div>
+                    <div class="slide" onclick="openLB('https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=600', 'Fiber Tech', 'ISP Infrastructure Deployment')"><img src="https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=400"></div>
+                    <div class="slide" onclick="openLB('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600', 'Media Core', 'Cinematic Camera Setup')"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="page-content">
+            <h2 class="text-4xl font-black mb-6 text-yellow-500">ABOUT ME</h2>
+            <p class="text-xl text-zinc-400">Technical specialist based in Nepal, active since 2002. Founder of 4FutureInstitute and operator of Khotang Khana Ghar.</p>
+        </section>
+
+        <section id="gallery" class="page-content">
+            <h2 class="text-4xl font-black mb-8 border-l-4 border-blue-600 pl-4">GALLERY</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-zinc-900 p-4 rounded-3xl border border-white/5 group cursor-pointer" onclick="openLB('https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=500', 'Network Deployment', 'Gothatar, Pahelopul')">
+                    <img src="https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?w=500" class="rounded-2xl mb-4 transition-transform group-hover:scale-[1.02]">
+                    <div class="text-xs text-blue-400 font-bold uppercase tracking-widest">Gothatar, Pahelopul</div>
+                    <div class="text-lg font-bold mt-1">Network Deployment</div>
+                    <div class="text-zinc-500 text-xs mt-2">Date: April 26, 2026 | Time: 12:00 AM</div>
+                </div>
+                <div class="bg-zinc-900 p-4 rounded-3xl border border-white/5 group cursor-pointer" onclick="openLB('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500', 'Media Production', 'Kathmandu, Nepal')">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500" class="rounded-2xl mb-4 transition-transform group-hover:scale-[1.02]">
+                    <div class="text-xs text-blue-400 font-bold uppercase tracking-widest">Kathmandu, Nepal</div>
+                    <div class="text-lg font-bold mt-1">Media Production</div>
+                    <div class="text-zinc-500 text-xs mt-2">Date: April 20, 2026 | Time: 10:30 AM</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page-content">
+            <h2 class="text-4xl font-black mb-8">CONTACT</h2>
+            <div class="space-y-6">
+                <a href="tel:9763622192" class="block p-6 bg-zinc-900 rounded-3xl text-2xl font-bold text-yellow-500 hover:bg-zinc-800 transition-colors">📞 Call: 9763622192</a>
+                <a href="mailto:info@daiyurai.com" class="block p-6 bg-zinc-900 rounded-3xl text-2xl font-bold text-blue-400 hover:bg-zinc-800 transition-colors">✉️ Email Me</a>
+                <a href="https://www.google.com/maps?q=Gothatar,Pahelopul,Nepal" target="_blank" class="block p-6 bg-zinc-900 rounded-3xl text-2xl font-bold text-green-400 hover:bg-zinc-800 transition-colors">📍 Gothatar, Pahelopul</a>
+            </div>
+            
+        </section>
+
+        <section id="comment-section" class="page-content">
+            <h2 class="text-4xl font-black mb-8">LEAVE A COMMENT</h2>
+            <textarea id="cInput" class="w-full bg-zinc-900 border border-white/10 rounded-2xl p-4 text-white h-32 mb-4 focus:border-gold outline-none" placeholder="Share your feedback..."></textarea>
+            <button onclick="postComment()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-colors">POST COMMENT</button>
+            <div id="cList" class="mt-8 space-y-4"></div>
+        </section>
+    </main>
+
+    <script>
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        
+        function showPage(id) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+            toggleMenu();
+            window.scrollTo(0,0);
+        }
+
+        function openLB(src, title, desc) {
+            document.getElementById('lb-img').src = src;
+            document.getElementById('lb-title').innerText = title;
+            document.getElementById('lb-desc').innerText = desc;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function postComment() {
+            const input = document.getElementById('cInput');
+            if(!input.value.trim()) return;
+            const div = document.createElement('div');
+            div.className = "bg-zinc-900 p-4 rounded-2xl border border-white/5 animate-fade-in";
+            div.innerHTML = `<p class="text-blue-400 text-xs font-bold mb-1">${new Date().toLocaleString()}</p><p>${input.value}</p>`;
+            document.getElementById('cList').prepend(div);
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
